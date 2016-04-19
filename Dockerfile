@@ -1,6 +1,5 @@
 # Use JDK7
-# TODO: test alpine, jdk8
-FROM java:openjdk-7
+FROM java:openjdk-7-alpine
 
 MAINTAINER foo foo@bar.io
 
@@ -10,10 +9,16 @@ EXPOSE 8080
 # default telnet server port
 EXPOSE 4242
 
+# Install curl and bash
+RUN apk update; \
+  apk add curl; \
+  apk add bash
+
 # Install Kairosdb
-RUN cd /opt; \
+RUN mkdir /opt; \
+  cd /opt; \
   curl -L https://github.com/kairosdb/kairosdb/releases/download/v1.1.1/kairosdb-1.1.1-1.tar.gz | \
-  tar zxfp -
+  tar zxvfp -
 
 # Add the start script
 ADD kairosdb.sh /usr/bin/kairosdb
